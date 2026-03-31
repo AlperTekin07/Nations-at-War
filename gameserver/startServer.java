@@ -26,14 +26,14 @@ class startServer {
                     ch.pipeline().addLast(new StringDecoder());
                     ch.pipeline().addLast(new StringEncoder());
                     ch.pipeline().addLast(new EchoHandler());
-                    
+
                     System.out.println("new connection from ip: " + ch.remoteAddress());
                 }
             });
 
             System.out.println("starting gameserver(port: " + port + ")");
             ChannelFuture f = b.bind(port).sync();
-            System.out.println("server (should be) running!");
+            System.out.println("server (should be) running!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             f.channel().closeFuture().sync();
         } finally {
