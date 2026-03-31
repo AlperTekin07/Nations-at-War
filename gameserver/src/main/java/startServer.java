@@ -1,3 +1,4 @@
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -34,7 +35,7 @@ class StartServer {
                 public void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new StringDecoder());
                     ch.pipeline().addLast(new StringEncoder());
-                    ch.pipeline().addLast(new EchoHandler());
+                    ch.pipeline().addLast(new EchoMsgHandler());
 
                     System.out.println("new connection from ip: " + ch.remoteAddress());
                 }
