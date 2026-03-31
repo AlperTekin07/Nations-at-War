@@ -1,13 +1,22 @@
-import java.nio.channels.SocketChannel;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 
-class startServer {
-    private static int port = 9000;
-
-    // constructor
+class StartServer {
+    private int port;
+    public StartServer(int port) {
+        this.port = port;
+    }
 
     public static void main(String[] args) throws Exception {
- 
-        new NettyServer(port).run();
+        new StartServer(9000).run();
     }
 
     public void run() throws Exception {
