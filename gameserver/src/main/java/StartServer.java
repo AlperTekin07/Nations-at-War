@@ -10,14 +10,14 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
-class StartServer2 {
+class StartServer {
     private int port;
-    public StartServer2(int port) {
+    public StartServer(int port) {
         this.port = port;
     }
 
     public static void main(String[] args) throws Exception {
-        new StartServer2(9000).run();
+        new StartServer(9000).run();
     }
 
     public void run() throws Exception {
@@ -35,7 +35,7 @@ class StartServer2 {
                 public void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new StringDecoder());
                     ch.pipeline().addLast(new StringEncoder());
-                    ch.pipeline().addLast(new EchoMsgHandler2());
+                    ch.pipeline().addLast(new EchoMsgHandler());
 
                     System.out.println("new connection from ip: " + ch.remoteAddress());
                 }
