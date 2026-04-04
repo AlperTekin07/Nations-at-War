@@ -18,13 +18,12 @@ public class PlayScreen extends AbstractScreen {
 
     public void update(float delta) {
         troopManager.updateAll(delta);
-        // Burada oyuncu canlarının kontrolü gibi mantıklar eklenebilir
+
     }
 
     @Override
     public void render(float delta) {
         update(delta);
-        // Çizim işlemleri buraya gelecek
     }
 
     @Override
