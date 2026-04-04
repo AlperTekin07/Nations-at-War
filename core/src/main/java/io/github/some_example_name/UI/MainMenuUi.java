@@ -1,5 +1,8 @@
 package io.github.some_example_name.UI;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -9,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import io.github.some_example_name.FirebaseTest;
 
-public class MainMenuUi {
+public class MainMenuUi implements Screen{
     private Stage stage;
     private Skin skin;
     private Table mainTable;
@@ -71,4 +74,38 @@ public class MainMenuUi {
     public void quit() {
 
     }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act();
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+
+        mainTable.setFillParent(true);
+        stage.addActor(mainTable);
+    }
+
+    @Override
+    public void pause() {}
+    @Override
+    public void resume() {}
+    @Override
+    public void hide() {}
 }

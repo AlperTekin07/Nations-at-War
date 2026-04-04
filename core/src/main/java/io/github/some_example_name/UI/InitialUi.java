@@ -1,6 +1,8 @@
 package io.github.some_example_name.UI;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,32 +14,32 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import io.github.some_example_name.AccountCheck;
 import io.github.some_example_name.FirebaseTest;
+import io.github.some_example_name.Main;
 
-public class InitialUi {
+public class InitialUi implements Screen{
+    private Main game;
     private Stage stage;
-    private Skin skin;
     private Table mainTable;
     private FirebaseTest test;
 
-    public InitialUi(Stage aStage, Skin aSkin) {
-        this.stage = aStage;
-        this.skin = aSkin;
+    public InitialUi(Main game) {
+        this.game = game;
         this.test = new FirebaseTest();
 
         mainTable = new Table();
-        mainTable.setFillParent(true);
-        stage.addActor(mainTable);
 
         showEmailScreen();
     }
 
+    
+
     public void showEmailScreen() {
         mainTable.clear();
 
-        Label emailLabel = new Label("Enter your email:", skin);
-        TextField emailField = new TextField("", skin);
+        Label emailLabel = new Label("Enter your email:", game.skin);
+        TextField emailField = new TextField("", game.skin);
         emailField.setMessageText("Email address:");
-        TextButton button = new TextButton("Next", skin);
+        TextButton button = new TextButton("Next", game.skin);
 
         mainTable.add(emailLabel).padBottom(20f).row();
         mainTable.add(emailField).width(300f).padBottom(10f).row();
@@ -73,11 +75,11 @@ public class InitialUi {
     public void showLoginScreen(String email) {
         mainTable.clear();
 
-        Label emailLabel = new Label(email, skin);
-        TextField passwordField = new TextField("", skin);
+        Label emailLabel = new Label(email, game.skin);
+        TextField passwordField = new TextField("", game.skin);
         passwordField.setMessageText("Password:");
 
-        TextButton button = new TextButton("Login", skin);
+        TextButton button = new TextButton("Login", game.skin);
         mainTable.add(emailLabel).padBottom(20f).row();
         mainTable.add(passwordField).width(300f).padBottom(10f).row();
         mainTable.add(button).width(150f);
@@ -88,6 +90,12 @@ public class InitialUi {
                 button.setDisabled(true);
                 String password = passwordField.getText();
                 test.login(email, password);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainMenuUi(stage, game.skin));
+                    }
+                });
             }
         });
     }
@@ -95,11 +103,11 @@ public class InitialUi {
     public void showSignupScreen(String email) {
         mainTable.clear();
 
-        Label emailLabel = new Label(email, skin);
-        TextField passwordField = new TextField("", skin);
+        Label emailLabel = new Label(email, game.skin);
+        TextField passwordField = new TextField("", game.skin);
         passwordField.setMessageText("Password:");
 
-        TextButton button = new TextButton("Signup", skin);
+        TextButton button = new TextButton("Signup", game.skin);
         mainTable.add(emailLabel).padBottom(20f).row();
         mainTable.add(passwordField).width(300f).padBottom(10f).row();
         mainTable.add(button).width(150f);
@@ -115,11 +123,11 @@ public class InitialUi {
     public void createUsername(String email, String password) {
         mainTable.clear();
 
-        Label usernamLabel = new Label("Username:", skin);
-        TextField usernameTextField = new TextField("", skin);
+        Label usernamLabel = new Label("Username:", game.skin);
+        TextField usernameTextField = new TextField("", game.skin);
         usernameTextField.setMessageText("Username:");
 
-        TextButton button = new TextButton("Create", skin);
+        TextButton button = new TextButton("Create", game.skin);
         mainTable.add(usernamLabel).padBottom(20f).row();
         mainTable.add(usernameTextField).width(300f).padBottom(10f).row();
         mainTable.add(button).width(150f);
@@ -134,4 +142,39 @@ public class InitialUi {
             }
         });
     }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act();
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+
+        mainTable.setFillParent(true);
+        stage.addActor(mainTable);
+        showEmailScreen();
+    }
+
+    @Override
+    public void pause() {}
+    @Override
+    public void resume() {}
+    @Override
+    public void hide() {}
 }

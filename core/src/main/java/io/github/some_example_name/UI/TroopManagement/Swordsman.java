@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream:core/src/main/java/io/github/some_example_name/Swordsman.java
 package io.github.some_example_name;
+=======
+package io.github.some_example_name.UI.TroopManagement;
+>>>>>>> Stashed changes:core/src/main/java/io/github/some_example_name/UI/TroopManagement/Swordsman.java
 
 public class Swordsman extends Troop {
     public Swordsman(float x, float y, int ownerID) {
