@@ -11,8 +11,8 @@ public class PlayScreen extends AbstractScreen {
     public PlayScreen() {
         super();
         this.troopManager = new TroopManager();
-        this.p1 = new Player(1, 100, 1000);
-        this.p2 = new Player(2, 100, 1000);
+        this.p1 = new Player(p1.getPlayerID());
+        this.p2 = new Player(p2.getPlayerID());
         this.inputHandler = new InputHandler(this);
     }
 
