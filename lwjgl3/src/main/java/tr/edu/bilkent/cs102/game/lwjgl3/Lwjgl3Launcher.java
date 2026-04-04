@@ -1,8 +1,7 @@
 package tr.edu.bilkent.cs102.game.lwjgl3;
-
+import io.github.some_example_name.Main;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import tr.edu.bilkent.cs102.game.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
