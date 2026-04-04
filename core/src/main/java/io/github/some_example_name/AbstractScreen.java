@@ -1,4 +1,4 @@
-package io.github.some_example_name.UI;
+package io.github.some_example_name;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

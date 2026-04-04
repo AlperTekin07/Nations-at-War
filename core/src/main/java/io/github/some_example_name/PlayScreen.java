@@ -1,4 +1,4 @@
-package io.github.some_example_name.UI;
+package io.github.some_example_name;
 
 import io.github.some_example_name.UI.TroopManagement.TroopManager;
 

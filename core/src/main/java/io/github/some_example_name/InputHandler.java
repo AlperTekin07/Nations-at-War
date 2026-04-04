@@ -1,4 +1,4 @@
-package io.github.some_example_name.UI;
+package io.github.some_example_name;
 
 public class InputHandler {
     private PlayScreen screen;
