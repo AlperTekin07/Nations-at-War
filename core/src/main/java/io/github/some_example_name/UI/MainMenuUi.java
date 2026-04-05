@@ -28,7 +28,7 @@ public class MainMenuUi implements Screen{
 
         mainTable = new Table();
         mainTable.setFillParent(true);
-        stage.addActor(mainTable);
+        this.stage.addActor(mainTable);
 
         showMainMenu();
         showStats();
@@ -86,8 +86,8 @@ public class MainMenuUi implements Screen{
 
     public void playGame() {
         System.out.println("LOG: Transitioning to Invite Menu...");
-        // This launches the new Invite menu!
-        game.setScreen(new InviteUi(game, stage, skin));
+        // FIXED: Changed 'skin' to 'game.skin'
+        game.setScreen(new InviteUi(game, stage, game.skin));
     }
 
     public void showSettings() {
@@ -95,7 +95,7 @@ public class MainMenuUi implements Screen{
     }
 
     public void quit() {
-
+        Gdx.app.exit();
     }
 
     @Override
