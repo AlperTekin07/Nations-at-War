@@ -11,10 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+// Pointing to the new folders your teammates created!
 import Game.Main;
 import Network.FirebaseTest;
 
-public class MainMenuUi implements Screen{
+public class MainMenuUi implements Screen {
     private Stage stage;
     private Main game;
     private Table mainTable;
@@ -39,10 +40,12 @@ public class MainMenuUi implements Screen{
 
         TextButton playGameButton = new TextButton("Play Game", game.skin);
         TextButton settingButton = new TextButton("Settings", game.skin);
+        TextButton networkTestButton = new TextButton("Network Test", game.skin); // Friend's test button!
         TextButton quitButton = new TextButton("Quit", game.skin);
 
         mainTable.add(playGameButton).width(150f).padBottom(50f).row();
         mainTable.add(settingButton).width(150f).padBottom(50f).row();
+        mainTable.add(networkTestButton).width(150f).padBottom(50f).row();
         mainTable.add(quitButton).width(150f);
 
         playGameButton.addListener(new ClickListener() {
@@ -56,6 +59,14 @@ public class MainMenuUi implements Screen{
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 showSettings();
+            }
+        });
+
+        networkTestButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                System.out.println("LOG: Opening Network Test Environment...");
+                game.setScreen(new NetworkTestUi(game, stage, game.skin));
             }
         });
 
@@ -86,7 +97,6 @@ public class MainMenuUi implements Screen{
 
     public void playGame() {
         System.out.println("LOG: Transitioning to Invite Menu...");
-        // FIXED: Changed 'skin' to 'game.skin'
         game.setScreen(new InviteUi(game, stage, game.skin));
     }
 
@@ -125,10 +135,7 @@ public class MainMenuUi implements Screen{
         stage.addActor(mainTable);
     }
 
-    @Override
-    public void pause() {}
-    @Override
-    public void resume() {}
-    @Override
-    public void hide() {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 }
