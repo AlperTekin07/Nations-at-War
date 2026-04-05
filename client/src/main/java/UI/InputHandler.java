@@ -7,10 +7,10 @@ public class InputHandler {
     }
 
     public void mouseDown(int x, int y) {
-        // Ekrana tıklandığında ne olacağını buraya yazabilirsin
+        
     }
 
     public void keyDown(int keycode) {
-        // Tuş basışlarını dinle
+        
     }
 }
