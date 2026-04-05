@@ -48,7 +48,7 @@ public class NetworkTestUi implements Screen {
         this.stage = stage;
         this.skin = skin;
         this.sim = new Simulation(false);
-        this.network = new NetworkManager("ip", 9000);
+        this.network = new NetworkManager("169.155.61.249", 9000);
 
         mainTable = new Table();
         mainTable.setFillParent(true);
