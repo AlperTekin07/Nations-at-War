@@ -5,7 +5,7 @@ package UI.TroopManagement;
 public class Dragon extends Troop {
     private boolean isFlying;
 
-    public Dragon(float x, float y, String ownerID) {
+    public Dragon(float x, float y, int ownerID) {
         super(x, y, 400, 100, 100f, ownerID, true, true, 500);
         this.isFlying = true;
     }

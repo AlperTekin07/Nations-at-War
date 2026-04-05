@@ -1,7 +1,7 @@
-package io.github.some_example_name.UI.TroopManagement;
+package UI.TroopManagement;
 
 public class Tower extends Troop {
-    public Tower(int x, int y, String ownerID) {
+    public Tower(int x, int y, int ownerID) {
         super(x, y, 5000, 100, 70f, ownerID, true, false, 0);
     }
 

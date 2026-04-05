@@ -3,17 +3,18 @@ package UI.TroopManagement;
 
 
 public abstract class Troop {
+    
     protected int cost;
     protected boolean isFlying;
     protected float x, y;
     protected int health;
     protected int damage;
     protected float range;
-    protected String ownerID;
+    protected int ownerID;
     protected Troop target;
     protected boolean canAttackAir;
 
-    public Troop(float x, float y, int health, int damage, float range, String ownerID, boolean airAttack, boolean isFlying, int cost){
+    public Troop(float x, float y, int health, int damage, float range, int ownerID, boolean airAttack, boolean isFlying, int cost){
         this.x = x;
         this.y = y;
         this.health = health;
@@ -60,7 +61,7 @@ public abstract class Troop {
     public int getHealth(){ return health; }
     public int getDamage(){ return damage; }
     public float getRange(){ return range; }
-    public String getOwnerID(){ return ownerID; }
+    public int getOwnerID(){ return ownerID; }
     public Troop getTarget(){ return target; }
 
     // setters

@@ -2,7 +2,7 @@ package UI.TroopManagement;
 
 
 public class Swordsman extends Troop {
-    public Swordsman(float x, float y, String ownerID) {
+    public Swordsman(float x, float y, int ownerID) {
         super(x, y, 100, 50, 30f, ownerID, false, false, 50);
     }
 

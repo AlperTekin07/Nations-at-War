@@ -1,40 +1,37 @@
-package io.github.some_example_name.UI;
+package UI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import io.github.some_example_name.FirebaseTest;
-import io.github.some_example_name.Main;
-import io.github.some_example_name.Player;
-import io.github.some_example_name.UI.TroopManagement.TroopManager;
+import Game.Main;
+import Game.Player;
+import UI.TroopManagement.TroopManager;
+
 
 public class GameScreenUI implements Screen{
     private Table popupMenu;
+    private String lastTroop = ""; 
     private Texture backTexture;
     private Image backImage;
     private Main game;
     private Stage stage;
     private Table mainTable;
-    private FirebaseTest test;
-    private TroopManager troopManage;
-    private Player player;
+    private UI.TroopManagement.TroopManager troopManage;
+    private Game.Player player;
 
     public GameScreenUI(Main game) {
-        this.player = new Player();
+        this.player = new Player(1);
         this.game = game;
         this.stage = new Stage();
-        this.test = new FirebaseTest();
         this.troopManage = new TroopManager();
 
         backTexture = new Texture(Gdx.files.internal("menu_items/background.jpg"));
@@ -45,9 +42,10 @@ public class GameScreenUI implements Screen{
 
         mainTable = new Table(); 
         popupMenu = new Table();
+        popupMenu.setVisible(false);
     }
 
-    public void askForVert(TakeVert vert) {
+    public void popupMenu(TakeVert vert) {
         popupMenu.clear();
 
         TextButton one = new TextButton("1", game.skin);
@@ -61,66 +59,94 @@ public class GameScreenUI implements Screen{
         one.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                vert.takeVertical(1);
+                if (player.getId() == 1) {
+                    troopManage.spawn(lastTroop, player.getId(), 20f, 600f);
+                } else {
+                    troopManage.spawn(lastTroop, player.getId(), 1200f, 600f);
+                }
             }
         });
 
         two.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                vert.takeVertical(2);
+                if (player.getId() == 1) {
+                    troopManage.spawn(lastTroop, player.getId(), x, 360f);
+                } else {
+                    troopManage.spawn(lastTroop, player.getId(), 1200f, 600f);
+                }
             }
         });
 
         third.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                vert.takeVertical(3);
+                if (player.getId() == 1) {
+                    troopManage.spawn(lastTroop, player.getId(), x, 120f);
+                } else {
+                    troopManage.spawn(lastTroop, player.getId(), 1200f, 600f);
+                }
+               
             }
         });
     }
 
     public void showTroops() {
+        Table troopTable = new Table();
+
         ImageButton archerButton = new ImageButton(game.skin, "archer");
         ImageButton swordsmanButton = new ImageButton(game.skin, "swordsman");
         ImageButton mageButton = new ImageButton(game.skin, "mage");
         ImageButton knighButton = new ImageButton(game.skin, "knight");
         ImageButton dragonButton = new ImageButton(game.skin, "dragon");
 
+        troopTable.add(dragonButton).padRight(10f);
+        troopTable.add(archerButton).padRight(10f);
+        troopTable.add(swordsmanButton).padRight(10f);
+        troopTable.add(knighButton).padRight(10f);
+        troopTable.add(mageButton).padRight(10f);
+
         archerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                troopManage.spawn("archer", game.userID, x, y);
+                troopManage.spawn("archer", player.getId(), x, y);
+                lastTroop = "archer";
             }
         });
 
         swordsmanButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                troopManage.spawn("swordsman", game.userID, x, y);
+                troopManage.spawn("swordsman", player.getId(), x, y);
+                lastTroop = "swordsman";
             }
         });
 
         knighButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                troopManage.spawn("knight", game.userID, x, y);
+                troopManage.spawn("knight", player.getId(), x, y);
+                lastTroop = "knight";
             }
         });
 
         mageButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                troopManage.spawn("mage", game.userID, x, y);
+                troopManage.spawn("mage", player.getId(), x, y);
+                lastTroop = "mage";
             }
         });
 
         dragonButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                troopManage.spawn("dragon", game.userID, x, y);
+                troopManage.spawn("dragon", player.getId(), x, y);
+                lastTroop = "dragon";
             }
         });
+
+        mainTable.add(troopTable).top().right();
     }
 
 

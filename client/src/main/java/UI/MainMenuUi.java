@@ -53,11 +53,13 @@ public class MainMenuUi implements Screen{
         TextButton settingButton = new TextButton("Settings", game.skin);
         TextButton networkTestButton = new TextButton("Network Test", game.skin); // Friend's test button!
         TextButton quitButton = new TextButton("Quit", game.skin);
+        TextButton logOutButton = new TextButton("Log-out", game.skin);
 
         mainTable.add(playGameButton).width(150f).padTop(80f).padBottom(50f).row();
         mainTable.add(settingButton).width(150f).padBottom(50f).row();
         mainTable.add(networkTestButton).width(150f).padBottom(50f).row();
         mainTable.add(quitButton).width(150f);
+        mainTable.add(logOutButton).width(150f).right().bottom();
 
         playGameButton.addListener(new ClickListener() {
             @Override
@@ -85,6 +87,13 @@ public class MainMenuUi implements Screen{
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 quit();
+            }
+        });
+
+        logOutButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                game.setScreen(new InitialUi(game));
             }
         });
     }
