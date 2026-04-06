@@ -1,7 +1,10 @@
 package UI;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,11 +22,16 @@ public class InviteUi implements Screen {
     private Stage stage;
     private Skin skin;
     private Table mainTable;
+    private Texture backTexture;
+    private SpriteBatch batch;
 
     public InviteUi(Main game, Stage stage, Skin skin) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
+        this.batch = new SpriteBatch();
+
+        backTexture = new Texture(Gdx.files.internal("menu_items/background.jpg"));
 
         mainTable = new Table();
         mainTable.setFillParent(true);
@@ -31,7 +39,6 @@ public class InviteUi implements Screen {
 
     private void buildUi() {
         mainTable.clear();
-
         mainTable.center();
 
         Table leftColumn = new Table();
@@ -45,53 +52,35 @@ public class InviteUi implements Screen {
 
         final TextField inviteEmailField = new TextField("", skin);
         inviteEmailField.setMessageText("Enter opponent's email...");
-        leftColumn.add(inviteEmailField).expandX().fillX().height(40f).padBottom(20f).row();
+        leftColumn.add(inviteEmailField).width(350f).height(40f).padBottom(20f).row();
 
-        // CLEANED UP TEXT
         TextButton sendInviteBtn = new TextButton("Send invite", skin);
-        leftColumn.add(sendInviteBtn).expandX().fillX().height(50f).padBottom(20f).row();
+        leftColumn.add(sendInviteBtn).width(350f).height(50f).padBottom(20f).row();
 
-        // CLEANED UP TEXT
         TextButton backBtn = new TextButton("Back to main menu", skin);
-        leftColumn.add(backBtn).expandX().fillX().height(50f).row();
+        leftColumn.add(backBtn).width(350f).height(50f).padBottom(20f).row();
 
-        TextButton testButton = new TextButton("Test", skin);
-        leftColumn.add(testButton).expandX().fillX().height(50f).row();
-
-
-        // ==========================================
-        // RIGHT COLUMN: Incoming Invites List
-        // ==========================================
+        TextButton testButton = new TextButton("Test Game UI", skin);
+        leftColumn.add(testButton).width(350f).height(50f).row();
 
         Label invitesTitle = new Label("Your invites", skin);
         rightColumn.add(invitesTitle).left().padBottom(20f).row();
 
         Table inviteListContainer = new Table(skin);
         inviteListContainer.top().left();
-
         inviteListContainer.add(createMockInvite("emirhan@bilkent.edu.tr")).expandX().fillX().padBottom(10f).row();
         inviteListContainer.add(createMockInvite("alper@bilkent.edu.tr")).expandX().fillX().padBottom(10f).row();
 
         rightColumn.add(inviteListContainer).expandX().fillX().top().left();
 
-
-        // ==========================================
-        // ASSEMBLE THE MAIN SCREEN
-        // ==========================================
-
         mainTable.add(leftColumn).expand().fill().pad(50f);
         mainTable.add(rightColumn).expand().fill().pad(50f);
-
-        // ==========================================
-        // BUTTON LOGIC
-        // ==========================================
 
         sendInviteBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String targetEmail = inviteEmailField.getText();
                 if (!targetEmail.isEmpty()) {
-                    System.out.println("LOG: Sending game invite to " + targetEmail);
                     inviteEmailField.setText("");
                 }
             }
@@ -116,7 +105,6 @@ public class InviteUi implements Screen {
 
     private Table createMockInvite(final String senderEmail) {
         final Table row = new Table(skin);
-
         Label inviteText = new Label("invite from <" + senderEmail + ">", skin);
         TextButton acceptBtn = new TextButton("accept", skin);
         TextButton denyBtn = new TextButton("deny", skin);
@@ -125,18 +113,9 @@ public class InviteUi implements Screen {
         row.add(acceptBtn).padRight(10f);
         row.add(denyBtn);
 
-        acceptBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("LOG: Accepted invite from " + senderEmail);
-                // game.setScreen(new PlayScreen());
-            }
-        });
-
         denyBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("LOG: Denied invite from " + senderEmail);
                 row.remove();
             }
         });
@@ -146,9 +125,8 @@ public class InviteUi implements Screen {
 
     @Override
     public void show() {
-        stage.setViewport(new FitViewport(1280, 720));
+        stage.setViewport(new FitViewport(1920, 1080));
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-
         Gdx.input.setInputProcessor(stage);
         stage.clear();
         buildUi();
@@ -159,6 +137,12 @@ public class InviteUi implements Screen {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Render background to absolute window size
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.begin();
+        batch.draw(backTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
+
         stage.act();
         stage.draw();
     }
@@ -168,7 +152,12 @@ public class InviteUi implements Screen {
         stage.getViewport().update(width, height, true);
     }
 
-    @Override public void dispose() {}
+    @Override
+    public void dispose() {
+        backTexture.dispose();
+        batch.dispose();
+    }
+
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

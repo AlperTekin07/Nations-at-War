@@ -5,14 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import Network.AccountCheck;
 import Network.FirebaseTest;
@@ -21,7 +22,7 @@ import Network.Stats;
 
 public class InitialUi implements Screen {
     private Texture backTexture;
-    private Image backImage;
+    private SpriteBatch batch;
     private Main game;
     private Stage stage;
     private Table mainTable;
@@ -29,15 +30,15 @@ public class InitialUi implements Screen {
 
     public InitialUi(Main game) {
         this.game = game;
-        this.stage = new Stage();
+        this.stage = new Stage(new FitViewport(1920, 1080));
         this.test = new FirebaseTest();
-        backTexture = new Texture(Gdx.files.internal("menu_items/background.jpg"));
-        backImage = new Image(backTexture);
+        this.batch = new SpriteBatch();
 
-        backImage.setFillParent(true);
-        stage.addActor(backImage);
+        backTexture = new Texture(Gdx.files.internal("menu_items/background.jpg"));
 
         mainTable = new Table();
+        mainTable.setFillParent(true);
+        stage.addActor(mainTable);
 
         showEmailScreen();
     }
@@ -63,17 +64,14 @@ public class InitialUi implements Screen {
                 if (!email.isEmpty()) {
                     button.setText("Loading");
                     button.setDisabled(true);
-                    test.doesAccountExist("test1@test.com", new AccountCheck() {
+                    test.doesAccountExist(email, new AccountCheck() {
                         @Override
                         public void onResult(boolean exists) {
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (exists) {
-                                        showLoginScreen(email);
-                                    } else {
-                                        showSignupScreen(email);
-                                    }
+                            Gdx.app.postRunnable(() -> {
+                                if (exists) {
+                                    showLoginScreen(email);
+                                } else {
+                                    showSignupScreen(email);
                                 }
                             });
                         }
@@ -92,6 +90,8 @@ public class InitialUi implements Screen {
 
         TextField passwordField = new TextField("", game.skin);
         passwordField.setMessageText("Password:");
+        passwordField.setPasswordMode(true);
+        passwordField.setPasswordCharacter('*');
 
         TextButton button = new TextButton("Login", game.skin);
         mainTable.add(emailLabel).padBottom(20f).row();
@@ -103,30 +103,19 @@ public class InitialUi implements Screen {
                 button.setText("logging in");
                 button.setDisabled(true);
                 String password = passwordField.getText();
-                test.login("test1@test.com", "123456", new Stats() {
+                test.login(email, password, new Stats() {
                     @Override
                     public void statsLoaded(String username, int games, int wins) {
-                        Gdx.app.postRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                game.games = games;
-                                game.username = username;
-                                game.wins = wins;
-
-                                stage.clear();
-
-                                game.setScreen(new MainMenuUi(game, stage, game.skin));
-                            }
+                        Gdx.app.postRunnable(() -> {
+                            game.games = games;
+                            game.username = username;
+                            game.wins = wins;
+                            game.setScreen(new MainMenuUi(game, stage, game.skin));
                         });
                     }
                     @Override
                     public void getUserID(String userID) {
-                        Gdx.app.postRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                game.userID = userID;
-                            }
-                        });
+                        Gdx.app.postRunnable(() -> game.userID = userID);
                     }
                 });
             }
@@ -141,6 +130,8 @@ public class InitialUi implements Screen {
         emailLabel.setFontScale(2f);
         TextField passwordField = new TextField("", game.skin);
         passwordField.setMessageText("Password:");
+        passwordField.setPasswordMode(true);
+        passwordField.setPasswordCharacter('*');
 
         TextButton button = new TextButton("Signup", game.skin);
         mainTable.add(emailLabel).padBottom(20f).row();
@@ -159,13 +150,15 @@ public class InitialUi implements Screen {
         mainTable.clear();
 
         Label usernamLabel = new Label("Username:", game.skin);
+        usernamLabel.setColor(Color.BLACK);
+        usernamLabel.setFontScale(2f);
         TextField usernameTextField = new TextField("", game.skin);
         usernameTextField.setMessageText("Username:");
 
         TextButton button = new TextButton("Create", game.skin);
         mainTable.add(usernamLabel).padBottom(20f).row();
-        mainTable.add(usernameTextField).width(300f).padBottom(10f).row();
-        mainTable.add(button).width(150f);
+        mainTable.add(usernameTextField).size(800f, 50f).padBottom(50f).row();
+        mainTable.add(button).size(400f, 50f);
 
         button.addListener(new ClickListener() {
             @Override
@@ -175,27 +168,16 @@ public class InitialUi implements Screen {
                     test.signUp(email, password, username, new Stats() {
                         @Override
                         public void statsLoaded(String username, int games, int wins) {
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    game.games = games;
-                                    game.username = username;
-                                    game.wins = wins;
-
-                                    stage.clear();
-
-                                    game.setScreen(new MainMenuUi(game, stage, game.skin));
-                                }
+                            Gdx.app.postRunnable(() -> {
+                                game.games = games;
+                                game.username = username;
+                                game.wins = wins;
+                                game.setScreen(new MainMenuUi(game, stage, game.skin));
                             });
                         }
                         @Override
                         public void getUserID(String userID) {
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    game.userID = userID;
-                                }
-                            });
+                            Gdx.app.postRunnable(() -> game.userID = userID);
                         }
                     });
                 }
@@ -207,6 +189,12 @@ public class InitialUi implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Render background to absolute window size
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.begin();
+        batch.draw(backTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
 
         stage.act();
         stage.draw();
@@ -220,17 +208,11 @@ public class InitialUi implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        backTexture.dispose();
+        batch.dispose();
     }
 
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-
-        mainTable.setFillParent(true);
-        stage.addActor(mainTable);
-        showEmailScreen();
-    }
-
+    @Override public void show() { Gdx.input.setInputProcessor(stage); }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}
